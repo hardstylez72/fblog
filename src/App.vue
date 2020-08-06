@@ -10,7 +10,7 @@
 import Vue from "vue";
 import Home from './pages/Home.vue';
 import Nav from './components/Nav.vue';
-console.log(process.env)
+console.log("config: ", process.env)
 export default Vue.extend({
   name: 'App',
   components: {

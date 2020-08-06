@@ -31,7 +31,6 @@ import store from '@/store/store'
                     .catch(console.error)
                     .finally(() => {
                       // eslint-disable-next-line no-undef
-                      cosnole.error('gg')
                     })
 
             }

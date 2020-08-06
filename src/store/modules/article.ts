@@ -19,7 +19,6 @@ export default {
     },
     actions: {
         makeRequest({commit}, payload: { method: Method, url: string, data: any }): Promise<any> {
-            console.log(payload)
             return requester(payload.method, payload.url, payload.data)
         },
     }
