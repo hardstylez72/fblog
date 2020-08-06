@@ -1,12 +1,25 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <NavigationPanel/>
+    <Home></Home>
   </div>
 </template>
+
+<script lang="ts">
+
+import Vue from "vue";
+import Home from './pages/Home.vue';
+import Nav from './components/Nav.vue';
+console.log(process.env)
+export default Vue.extend({
+  name: 'App',
+  components: {
+    Home,
+    NavigationPanel: Nav,
+  }
+});
+
+</script>
 
 <style lang="less">
 #app {
