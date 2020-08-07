@@ -1,7 +1,7 @@
 <template lang="pug">
     div
         b-navbar(toggleable='lg' type='dark' variant='info')
-            b-navbar-brand(href='#') HSBlog
+            b-navbar-brand(href='#') Eblog
             b-navbar-toggle(target='nav-collapse')
             b-collapse#nav-collapse(is-nav='')
                 b-navbar-nav.ml-auto
@@ -17,12 +17,10 @@
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
-  export default  Vue.extend({
-      name: "Nav"
-  })
+import Vue from "vue";
+export default Vue.extend({
+  name: "Nav"
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

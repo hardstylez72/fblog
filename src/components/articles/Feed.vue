@@ -1,7 +1,7 @@
 <template lang="pug">
     div
       div(v-for="article in articles")
-        articleCard(:article="article.")
+        articleCard(:article="article")
 
 </template>
 
