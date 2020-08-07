@@ -1,25 +1,76 @@
-import requester from "@/store/requester";
-import {Method} from "axios";
+import store from "@/store/store";
+import { Method } from "axios";
+import { Moment } from "moment";
+
+interface Request {
+  method: Method;
+  url: string;
+  data: any;
+}
+
+export interface Article {
+  body: string;
+  title: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
+interface SaveArticleRequest {
+  body: string;
+  title: string;
+  userId: string;
+}
+
+interface GetListOfArticlesRequest {
+  from: Moment;
+  to: Moment;
+}
 
 export interface Module1State {
-    name: null | string
+  name: null | string;
 }
 export default {
-    namespaced: true as true,
-    state: {
-        name: null
-    } as Module1State,
-    getters: {
-        message: state => `Hello, ${state.name}!`
-    },
-    mutations: {
-        SET_NAME(state, newName: string) {
-            state.name = newName
-        },
-    },
-    actions: {
-        makeRequest({commit}, payload: { method: Method, url: string, data: any }): Promise<any> {
-            return requester(payload.method, payload.url, payload.data)
-        },
+  namespaced: true as true,
+  state: {
+    name: null
+  } as Module1State,
+  getters: {
+    message: state => `Hello, ${state.name}!`
+  },
+  mutations: {
+    SET_NAME(state, newName: string) {
+      state.name = newName;
     }
-}
+  },
+  actions: {
+    async saveArticle(context, payload: SaveArticleRequest): Promise<string> {
+      const r: Request = {
+        url: "/api/v1/article",
+        method: "POST",
+        data: payload
+      };
+      return await store.dispatch.makeRequest(r);
+    },
+    async getArticleById(context, id: string): Promise<string> {
+      const r: Request = {
+        url: `/api/v1/article/${id}`,
+        method: "GET",
+        data: {}
+      };
+      return await store.dispatch.makeRequest(r);
+    },
+    async getArticlesByPeriod(
+      context,
+      payload: GetListOfArticlesRequest
+    ): Promise<Array<Article>> {
+      const r: Request = {
+        url: `/api/v1/articles?from=${payload.from.format()}&to=${payload.to.format()}`,
+        method: "GET",
+        data: {}
+      };
+      return await store.dispatch.makeRequest(r);
+    }
+  }
+};

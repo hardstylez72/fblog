@@ -7,40 +7,36 @@
 </template>
 
 <script>
-import store from '@/store/store'
-    export default {
-        name: "MarkdownEditor",
-        data() {
-            return {
-                body: '',
-                title: '',
-            };
-        },
-        methods: {
-            onSave() {
-                console.log(this.body + this.title)
-              store.dispatch.article.makeRequest({
-                    method: 'post',
-                    url: '/api/v1/article',
-                    data: {
-                        body: this.body,
-                        title: this.title,
-                        userId: 'cfdbd4f3-b910-4bf4-aa6b-a79a5372998c'
-                    },
-                })
-                    .catch(console.error)
-                    .finally(() => {
-                      // eslint-disable-next-line no-undef
-                    })
-
-            }
-        }
+import store from "@/store/store";
+export default {
+  name: "MarkdownEditor",
+  data() {
+    return {
+      body: "",
+      title: ""
+    };
+  },
+  methods: {
+    onSave() {
+      store.dispatch.article
+        .saveArticle(
+          {
+            body: this.body,
+            title: this.title,
+            userId: "cfdbd4f3-b910-4bf4-aa6b-a79a5372998c"
+          }
+        )
+        .catch(console.error)
+        .finally(() => {
+          // eslint-disable-next-line no-undef
+        });
     }
+  }
+};
 </script>
 
 <style scoped>
-    /*.markdown-editor {*/
-    /*    height: 70%;*/
-    /*}*/
-
+/*.markdown-editor {*/
+/*    height: 70%;*/
+/*}*/
 </style>
