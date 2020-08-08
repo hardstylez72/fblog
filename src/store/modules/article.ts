@@ -8,13 +8,17 @@ interface Request {
   data: any;
 }
 
-export interface Article {
+export interface ArticlePreview {
+  id: string;
   preface: string;
   title: string;
   userId: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
+}
+export interface Article extends ArticlePreview {
+  body: string;
 }
 
 interface SaveArticleRequest {
@@ -48,7 +52,7 @@ export default {
       };
       return await store.dispatch.makeRequest(r);
     },
-    async getArticleById(context, id: string): Promise<string> {
+    async getArticleById(context, id: string): Promise<Article> {
       const r: Request = {
         url: `/api/v1/article/${id}`,
         method: "GET",
@@ -59,7 +63,7 @@ export default {
     async getArticlesByPeriod(
       context,
       payload: GetListOfArticlesRequest
-    ): Promise<Array<Article>> {
+    ): Promise<Array<ArticlePreview>> {
       const r: Request = {
         url: `/api/v1/articles?from=${payload.from.format()}&to=${payload.to.format()}`,
         method: "GET",

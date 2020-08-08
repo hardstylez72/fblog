@@ -1,26 +1,37 @@
 <template lang="pug">
     div
-      div(v-for="article in articles")
-        articlePreface(:article="article")
-
+      div(v-for="articlePreview in articlesPreviews")
+        articlePreview(:article="articlePreview" @openArticle="openArticle")
+      b-modal(v-model="showArticle" id="article-card" size="xl" :ok-only="true" :no-close-on-backdrop="true")
+        articleCard(:articleId="articleId")
 </template>
 
 <script lang="ts">
 import store from "@/store/store";
-import articlePreface from "./ArticlePreface.vue";
-import { Article } from "@/store/modules/article";
+import articlePreview from "@/components/articles/ArticlePreview.vue";
+import articleCard from "@/components/articles/ArticleCard.vue";
+import { ArticlePreview } from "@/store/modules/article";
 import Vue from "vue";
 import { now, getDate } from "@/store/date";
 
 export default Vue.extend({
   name: "FeedWithArticles",
   components: {
-    articlePreface
+    articlePreview,
+    articleCard
   },
   data() {
     return {
-      articles: Array<Article>(0)
+      articlesPreviews: Array<ArticlePreview>(0),
+      showArticle: false,
+      articleId: null
     };
+  },
+  methods: {
+    openArticle(articleId) {
+      this.showArticle = true;
+      this.articleId = articleId;
+    }
   },
   mounted() {
     const to = getDate(now()).endOf("month");
@@ -28,7 +39,7 @@ export default Vue.extend({
     store.dispatch.article
       .getArticlesByPeriod({ from: from, to: to })
       .then(articles => {
-        this.articles = articles;
+        this.articlesPreviews = articles;
       });
   }
 });
