@@ -1,13 +1,13 @@
 <template lang="pug">
     div
       div(v-for="article in articles")
-        articleCard(:article="article")
+        articlePreface(:article="article")
 
 </template>
 
 <script lang="ts">
 import store from "@/store/store";
-import articleCard from "./Article.vue";
+import articlePreface from "./ArticlePreface.vue";
 import { Article } from "@/store/modules/article";
 import Vue from "vue";
 import { now, getDate } from "@/store/date";
@@ -15,7 +15,7 @@ import { now, getDate } from "@/store/date";
 export default Vue.extend({
   name: "FeedWithArticles",
   components: {
-    articleCard
+    articlePreface
   },
   data() {
     return {
@@ -25,7 +25,6 @@ export default Vue.extend({
   mounted() {
     const to = getDate(now()).endOf("month");
     const from = getDate(now()).startOf("month");
-    console.log(from, to);
     store.dispatch.article
       .getArticlesByPeriod({ from: from, to: to })
       .then(articles => {

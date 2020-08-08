@@ -1,31 +1,36 @@
 import Vue from "vue";
-import Vuex from 'vuex'
+import Vuex from "vuex";
 
-import { createDirectStore } from "direct-vuex"
-import article from "./modules/article"
-import {Method} from "axios";
+import { createDirectStore } from "direct-vuex";
+import article from "./modules/article";
+import auth from "@/store/modules/auth";
+import { Method } from "axios";
 import requester from "@/store/requester";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-  const { store, rootActionContext, moduleActionContext } = createDirectStore({
-    actions: {
-      makeRequest({commit}, payload: { method: Method, url: string, data: any }): Promise<any> {
-        return requester(payload.method, payload.url, payload.data)
-      },
-    },
-    modules: {
-      article: article,
+const { store, rootActionContext, moduleActionContext } = createDirectStore({
+  actions: {
+    makeRequest(
+      { commit },
+      payload: { method: Method; url: string; data: any }
+    ): Promise<any> {
+      return requester(payload.method, payload.url, payload.data);
     }
-  })
+  },
+  modules: {
+    article: article,
+    auth: auth
+  }
+});
 
-export default store
+export default store;
 
-export { rootActionContext, moduleActionContext }
+export { rootActionContext, moduleActionContext };
 
-export type AppStore = typeof store
+export type AppStore = typeof store;
 declare module "vuex" {
   interface Store<S> {
-    direct: AppStore
+    direct: AppStore;
   }
 }

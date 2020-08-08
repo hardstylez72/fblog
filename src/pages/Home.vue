@@ -1,12 +1,11 @@
 <template lang="pug">
     b-container(align-v="start")
-        b-button(v-b-modal="'markdown-editor-modal'" pill variant="success" class="add-article-button") Add
-          b-modal(id="markdown-editor-modal" size="xl")
-            MarkdownEditor
         b-row
             b-col(align-self="start")
-            FeedWithArticles
-
+              b-button(v-b-modal="'markdown-editor-modal'" size="md" pill variant="success" class="add-article-button") +
+              b-modal(id="markdown-editor-modal" size="xl" :hide-footer="true" :no-close-on-backdrop="true")
+                MarkdownEditor
+              FeedWithArticles
 </template>
 
 <script lang="ts">
@@ -35,8 +34,5 @@ export default Vue.extend({
 .add-article-button {
   float: right;
   margin: 1%;
-}
-#markdown-editor-modal {
-  width: 2000px;
 }
 </style>

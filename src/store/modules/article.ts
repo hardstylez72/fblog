@@ -9,7 +9,7 @@ interface Request {
 }
 
 export interface Article {
-  body: string;
+  preface: string;
   title: string;
   userId: string;
   createdAt: string;
@@ -20,6 +20,7 @@ export interface Article {
 interface SaveArticleRequest {
   body: string;
   title: string;
+  preface: string;
   userId: string;
 }
 
@@ -36,14 +37,8 @@ export default {
   state: {
     name: null
   } as Module1State,
-  getters: {
-    message: state => `Hello, ${state.name}!`
-  },
-  mutations: {
-    SET_NAME(state, newName: string) {
-      state.name = newName;
-    }
-  },
+  getters: {},
+  mutations: {},
   actions: {
     async saveArticle(context, payload: SaveArticleRequest): Promise<string> {
       const r: Request = {
