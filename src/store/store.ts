@@ -4,6 +4,7 @@ import Vuex from "vuex";
 import { createDirectStore } from "direct-vuex";
 import article from "./modules/article";
 import auth from "@/store/modules/auth";
+import objectStorage from "@/store/modules/objectStorage";
 import { Method } from "axios";
 import requester from "@/store/requester";
 
@@ -13,14 +14,20 @@ const { store, rootActionContext, moduleActionContext } = createDirectStore({
   actions: {
     makeRequest(
       { commit },
-      payload: { method: Method; url: string; data: any }
+      payload: { method: Method; url: string; data: any; headers?: any }
     ): Promise<any> {
-      return requester(payload.method, payload.url, payload.data);
+      return requester(
+        payload.method,
+        payload.url,
+        payload.data,
+        payload.headers
+      );
     }
   },
   modules: {
     article: article,
-    auth: auth
+    auth: auth,
+    objectStorage: objectStorage
   }
 });
 

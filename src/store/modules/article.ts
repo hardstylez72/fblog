@@ -2,10 +2,11 @@ import store from "@/store/store";
 import { Method } from "axios";
 import { Moment } from "moment";
 
-interface Request {
+export interface Request {
   method: Method;
   url: string;
   data: any;
+  headers?: any;
 }
 
 export interface ArticlePreview {

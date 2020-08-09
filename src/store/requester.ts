@@ -20,15 +20,18 @@ instance.interceptors.response.use(
   }
 );
 
-export default (method: Method, url: string, payload: any) => {
+export default (method: Method, url: string, payload: any, headers?: any) => {
+  headers = {
+    "x-date": getDate(moment()).format(),
+    "x-request-id": uuid(),
+    ...headers
+  };
+
   return instance({
     method,
     url: process.env.VUE_APP_SERVER_HOST + url,
     data: payload,
-    headers: {
-      "x-date": getDate(moment()).format(),
-      "x-request-id": uuid()
-    },
+    headers: headers,
 
     withCredentials: true,
     timeout: 30000

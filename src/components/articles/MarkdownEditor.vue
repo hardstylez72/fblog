@@ -10,7 +10,15 @@
           b-form-invalid-feedback(:tooltip="true" :state="prefaceValidation") Preface required.
           br
         b-form-group
-          v-md-editor(v-model='body' :state="bodyValidation" class="markdown-editor" height="500px" lang="en-US")
+          v-md-editor(
+            v-model='body'
+            :state="bodyValidation"
+            :disabled-menus="[]"
+            left-toolbar="undo redo | image"
+            @upload-image="handleUploadImage"
+            class="markdown-editor"
+            height="500px"
+            lang="en-US")
           b-form-invalid-feedback(:tooltip="true" :state="bodyValidation") Body required.
           div(class="article-save-button")
             b-button(v-if="!saveButton.isLoading" @click='onSave'  type="submit" :variant="saveButton.variant") Save
@@ -22,6 +30,7 @@
 
 <script>
 import store from "@/store/store";
+import objectStorage from "@/store/modules/objectStorage";
 
 export default {
   name: "MarkdownEditor",
@@ -63,6 +72,19 @@ export default {
     }
   },
   methods: {
+    async handleUploadImage(event, insertImage, files) {
+      // Get the files and upload them to the file server, then insert the corresponding content into the editor
+      console.log(files);
+
+      const uploadedFiles = await store.dispatch.objectStorage.uploadFiles(
+        files
+      );
+
+      const file = uploadedFiles.files[0];
+      insertImage({
+        url: file.url
+      });
+    },
     onSave() {
       if (!this.isFormValid) {
         if (this.body === " ") {
