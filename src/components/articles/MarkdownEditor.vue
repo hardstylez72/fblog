@@ -6,7 +6,7 @@
           b-form-invalid-feedback(:tooltip="true" :state="titleValidation") Title required.
           br
         b-form-group
-          b-form-input(v-model="preface" type="text" :state="prefaceValidation" placeholder="Enter article's preface")
+          b-form-textarea(v-model="preface" type="text" :state="prefaceValidation" placeholder="Enter article's preface")
           b-form-invalid-feedback(:tooltip="true" :state="prefaceValidation") Preface required.
           br
         b-form-group
