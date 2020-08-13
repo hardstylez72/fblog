@@ -10,10 +10,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import NavigationPanel from "../components/Nav.vue";
+import NavigationPanel from "@/components/nav/Nav.vue";
 import RefList from "../components/RefList.vue";
 import FeedWithArticles from "../components/articles/Feed.vue";
 import MarkdownEditor from "../components/articles/MarkdownEditor.vue";
+import store from "@/store/store";
 
 export default Vue.extend({
   name: "Home",
@@ -22,6 +23,9 @@ export default Vue.extend({
     RefList,
     FeedWithArticles,
     MarkdownEditor
+  },
+  mounted() {
+    store.dispatch.user.getMe();
   }
 });
 </script>

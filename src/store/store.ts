@@ -3,14 +3,20 @@ import Vuex from "vuex";
 
 import { createDirectStore } from "direct-vuex";
 import article from "./modules/article";
-import auth from "@/store/modules/auth";
+import userModule from "@/store/modules/user";
 import objectStorage from "@/store/modules/objectStorage";
 import { Method } from "axios";
 import requester from "@/store/requester";
 
 Vue.use(Vuex);
 
-const { store, rootActionContext, moduleActionContext } = createDirectStore({
+const {
+  store,
+  rootActionContext,
+  moduleActionContext,
+  rootGetterContext,
+  moduleGetterContext
+} = createDirectStore({
   actions: {
     makeRequest(
       { commit },
@@ -26,14 +32,19 @@ const { store, rootActionContext, moduleActionContext } = createDirectStore({
   },
   modules: {
     article: article,
-    auth: auth,
+    user: userModule,
     objectStorage: objectStorage
   }
 });
 
 export default store;
 
-export { rootActionContext, moduleActionContext };
+export {
+  rootActionContext,
+  moduleActionContext,
+  rootGetterContext,
+  moduleGetterContext
+};
 
 export type AppStore = typeof store;
 declare module "vuex" {

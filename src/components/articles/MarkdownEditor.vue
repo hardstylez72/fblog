@@ -14,7 +14,6 @@
             v-model='body'
             :state="bodyValidation"
             :disabled-menus="[]"
-            left-toolbar="undo redo | image"
             @upload-image="handleUploadImage"
             class="markdown-editor"
             height="500px"
@@ -60,7 +59,7 @@ export default {
       return this.preface.length > 0;
     },
     bodyValidation() {
-      if (this.preface === " ") {
+      if (this.body === " ") {
         return null;
       }
       return this.body.length > 0;
@@ -73,14 +72,16 @@ export default {
   },
   methods: {
     async handleUploadImage(event, insertImage, files) {
-      // Get the files and upload them to the file server, then insert the corresponding content into the editor
-      console.log(files);
-
       const uploadedFiles = await store.dispatch.objectStorage.uploadFiles(
         files
       );
 
-      const file = uploadedFiles.files[0];
+      console.log("uploadedFiles", uploadedFiles);
+
+      if (files.length === 0) {
+        return;
+      }
+      const file = uploadedFiles[0];
       insertImage({
         url: file.url
       });
@@ -106,7 +107,7 @@ export default {
           preface: this.preface,
           body: this.body,
           title: this.title,
-          userId: store.getters.auth.userId
+          userId: store.getters.user.userId
         })
         .then(() => {
           this.saveButton.variant = "success";
@@ -117,7 +118,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.saveButton.isLoading = false;
-          }, 1000);
+          }, 800);
         });
     }
   }

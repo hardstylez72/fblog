@@ -1,13 +1,6 @@
 import store from "@/store/store";
 import { Request } from "@/store/modules/article";
 
-interface File {
-  lastModified: number;
-  name: string;
-  size: number;
-  type: string;
-}
-
 interface UploadObjectsResponse {
   files: Array<UploadedFile>;
 }
@@ -38,7 +31,6 @@ export default {
       };
 
       payload.forEach(el => {
-        console.log("fff, ", el);
         bodyFormData.append("files", el);
       });
 
@@ -48,7 +40,7 @@ export default {
         data: bodyFormData,
         headers: headers
       };
-      return await store.dispatch.makeRequest(r);
+      return await store.dispatch.makeRequest(r).then(res => res.files);
     }
   }
 };

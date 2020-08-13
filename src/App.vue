@@ -1,24 +1,22 @@
 <template>
   <div id="app">
-    <NavigationPanel/>
+    <NavigationPanel />
     <Home></Home>
   </div>
 </template>
 
 <script lang="ts">
-
 import Vue from "vue";
-import Home from './pages/Home.vue';
-import Nav from './components/Nav.vue';
-console.log("config: ", process.env)
+import Home from "./pages/Home.vue";
+import Nav from "./components/nav/Nav.vue";
+console.log("config: ", process.env);
 export default Vue.extend({
-  name: 'App',
+  name: "App",
   components: {
     Home,
-    NavigationPanel: Nav,
+    NavigationPanel: Nav
   }
 });
-
 </script>
 
 <style lang="less">

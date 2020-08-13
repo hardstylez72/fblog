@@ -37,7 +37,7 @@ export default (method: Method, url: string, payload: any, headers?: any) => {
     timeout: 30000
   })
     .then(res => {
-      store.commit.auth.setUserId(res.headers["user_id"]);
+      store.commit.user.setUserId(res.headers["user_id"]);
       return res.data;
     })
     .catch(err => {
