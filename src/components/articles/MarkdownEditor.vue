@@ -16,14 +16,20 @@
             :disabled-menus="[]"
             @upload-image="handleUploadImage"
             class="markdown-editor"
-            height="500px"
-            lang="en-US")
+            height="500px")
           b-form-invalid-feedback(:tooltip="true" :state="bodyValidation") Body required.
           div(class="article-save-button")
-            b-button(v-if="!saveButton.isLoading" @click='onSave'  type="submit" :variant="saveButton.variant") Save
-            b-button(v-else disabled)
-              b-spinner( small type="grow")
-              | Saving...
+            div(v-if="editorType === 'saving'")
+              b-button(v-if="!saveButton.isLoading" @click='onSave'  type="submit" :variant="saveButton.variant") Save
+              b-button(v-else disabled)
+                b-spinner( small type="grow")
+                | Saving...
+            div(v-if="editorType === 'updating'")
+              b-button(v-if="!updateButton.isLoading" @click='onUpdate'  type="submit" :variant="updateButton.variant") Update
+              b-button(v-else disabled)
+                b-spinner( small type="grow")
+                | Updating...
+
 
 </template>
 
@@ -33,9 +39,21 @@ import objectStorage from "@/store/modules/objectStorage";
 
 export default {
   name: "MarkdownEditor",
+  props: {
+    editorType: {
+      default: "saving"
+    },
+    articleId: {
+      default: null
+    }
+  },
   data() {
     return {
       saveButton: {
+        isLoading: false,
+        variant: "primary"
+      },
+      updateButton: {
         isLoading: false,
         variant: "primary"
       },
@@ -43,6 +61,15 @@ export default {
       title: null,
       preface: null
     };
+  },
+  mounted() {
+    if (this.editorType === "updating") {
+      store.dispatch.article.getArticleById(this.articleId).then(article => {
+        this.body = article.body;
+        this.title = article.title;
+        this.preface = article.preface;
+      });
+    }
   },
   computed: {
     titleValidation() {
@@ -86,6 +113,60 @@ export default {
         url: file.url
       });
     },
+    toast(text, variant, append = false) {
+      this.$bvToast.toast(text, {
+        autoHideDelay: 3000,
+        title: `Saving an article`,
+        solid: true,
+        variant: variant,
+        appendToast: append
+      });
+    },
+    onUpdate() {
+      if (!this.isFormValid) {
+        if (this.body === " ") {
+          this.body = "";
+        }
+        if (this.title === null) {
+          this.title = "";
+        }
+        if (this.preface === null) {
+          this.preface = "";
+        }
+        return;
+      }
+
+      this.updateButton.isLoading = true;
+      let updatingErr = null;
+
+      store.dispatch.article
+        .updateArticle({
+          id: this.articleId,
+          preface: this.preface,
+          body: this.body,
+          title: this.title,
+          userId: store.getters.user.userId
+        })
+        .then(() => {
+          const variant = "success";
+          this.toast("The article was successfully updated", variant);
+          this.updateButton.variant = variant;
+        })
+        .catch(err => {
+          updatingErr = err;
+          const variant = "danger";
+          this.toast("Error while updating an article", variant);
+          this.updateButton.variant = variant;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.updateButton.isLoading = false;
+            if (!updatingErr) {
+              this.$emit("onUpdate");
+            }
+          }, 400);
+        });
+    },
     onSave() {
       if (!this.isFormValid) {
         if (this.body === " ") {
@@ -101,6 +182,7 @@ export default {
       }
 
       this.saveButton.isLoading = true;
+      let savingErr = null;
 
       store.dispatch.article
         .saveArticle({
@@ -110,15 +192,23 @@ export default {
           userId: store.getters.user.userId
         })
         .then(() => {
-          this.saveButton.variant = "success";
+          const variant = "success";
+          this.toast("The article was successfully saved", variant);
+          this.saveButton.variant = variant;
         })
-        .catch(() => {
-          this.saveButton.variant = "danger";
+        .catch(err => {
+          savingErr = err;
+          const variant = "danger";
+          this.toast("Error while saving an article", variant);
+          this.saveButton.variant = variant;
         })
         .finally(() => {
           setTimeout(() => {
-            this.saveButton.isLoading = false;
-          }, 800);
+            if (!savingErr) {
+              this.saveButton.isLoading = false;
+              this.$emit("onSave");
+            }
+          }, 400);
         });
     }
   }

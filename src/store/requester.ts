@@ -6,19 +6,19 @@ import store from "@/store/store";
 
 const instance = axios.create();
 
-instance.interceptors.response.use(
-  function(response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    console.log(response.headers);
-    return response;
-  },
-  function(error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    return Promise.reject(error);
-  }
-);
+// instance.interceptors.response.use(
+//   function(response) {
+//     // Any status code that lie within the range of 2xx cause this function to trigger
+//     // Do something with response data
+//     console.log(response.headers);
+//     return response;
+//   },
+//   function(error) {
+//     // Any status codes that falls outside the range of 2xx cause this function to trigger
+//     // Do something with response error
+//     return Promise.reject(error);
+//   }
+// );
 
 export default (method: Method, url: string, payload: any, headers?: any) => {
   headers = {
@@ -40,8 +40,8 @@ export default (method: Method, url: string, payload: any, headers?: any) => {
       store.commit.user.setUserId(res.headers["user_id"]);
       return res.data;
     })
-    .catch(err => {
+    .catch(async err => {
       console.error(err);
-      return err;
+      throw err;
     });
 };

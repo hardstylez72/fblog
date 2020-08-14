@@ -29,16 +29,24 @@ export interface UserState {
   userId: null | string;
   isAuthorized: boolean;
   user: User;
+  isAdmin: boolean;
 }
 const userModule = defineModule({
   namespaced: true as true,
   state: {
     userId: null,
     isAuthorized: false,
-    user: {} as User
+    user: {} as User,
+    isAdmin: false
   } as UserState,
   getters: {
     isAuthorized: state => state.isAuthorized,
+    isAdmin: state => {
+      if (state.isAuthorized) {
+        return state.user.roleId === UserRoleTypes.ADMIN;
+      }
+      return false;
+    },
     userId: state => state.userId,
     user: state => state.user
   },

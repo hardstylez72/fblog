@@ -45,7 +45,7 @@ export default Vue.extend({
   cursor: pointer;
 }
 .article-card {
-  margin: 3%;
-  width: 90%;
+  margin: 1%;
+  width: 100%;
 }
 </style>
