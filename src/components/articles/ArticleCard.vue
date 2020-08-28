@@ -4,8 +4,8 @@
         b-card(:aria-hidden="showOverlay ? 'true' : null")
           template(v-slot:header)
             h4(class="mb-0") {{article.title}}
-              b-button(v-if="isEditButtonVisible" class="edit-article-btn" size="sm")
-                b-icon(icon="pencil-square" @click="editArticle")
+              b-button(v-if="isEditButtonVisible" class="edit-article-btn" size="sm" @click="editArticle")
+                b-icon(icon="pencil-square" )
           b-card-header {{article.createdAt}}
           v-md-preview(:text="article.body")
 </template>
